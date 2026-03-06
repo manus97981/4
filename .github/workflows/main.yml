@@ -9,26 +9,23 @@ jobs:
     timeout-minutes: 360
 
     steps:
-      - name: Download RustDesk
+      - name: Download RustDesk Portable
         run: |
           $url="https://github.com/rustdesk/rustdesk/releases/download/1.2.3/rustdesk-1.2.3-x86_64.exe"
           Invoke-WebRequest $url -OutFile rustdesk.exe
 
-      - name: Install RustDesk
-        run: |
-          Start-Process .\rustdesk.exe -ArgumentList "--silent-install" -Wait
-
       - name: Start RustDesk
         run: |
-          Start-Process "C:\Program Files\RustDesk\rustdesk.exe"
-          Start-Sleep 20
+          Start-Process ".\rustdesk.exe"
+          Start-Sleep 15
 
-      - name: Show ID
+      - name: Show RustDesk ID
         run: |
-          & "C:\Program Files\RustDesk\rustdesk.exe" --get-id
+          .\rustdesk.exe --get-id
 
-      - name: Keep Alive
+      - name: Keep Runner Alive
         run: |
           while ($true) {
+            Write-Host "RustDesk Running..."
             Start-Sleep 300
           }
