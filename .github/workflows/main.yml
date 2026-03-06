@@ -1,35 +1,33 @@
-name: RustDesk-RDP
+name: CRD-RDP
 
 on:
   workflow_dispatch:
 
 jobs:
-  rdp:
+  build:
     runs-on: windows-latest
     timeout-minutes: 360
 
     steps:
-      - name: Download RustDesk Portable
+      - name: Download Chrome Remote Desktop
         run: |
-          $url="https://github.com/rustdesk/rustdesk/releases/download/1.2.3/rustdesk-1.2.3-x86_64.exe"
-          Invoke-WebRequest $url -OutFile rustdesk.exe
+          Invoke-WebRequest https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile crd.msi
+          Start-Process msiexec.exe -ArgumentList '/i crd.msi /quiet /norestart' -Wait
 
-      - name: Extract RustDesk
+      - name: Install Chrome
         run: |
-          Start-Process .\rustdesk.exe
-          Start-Sleep 20
+          Invoke-WebRequest https://www.slimjet.com/chrome/download-chrome-offline-installer.exe -OutFile chrome.exe
+          Start-Process chrome.exe -ArgumentList '/silent /install' -Wait
 
-      - name: Show RustDesk Info
+      - name: Setup CRD
         run: |
-          Write-Host "====================================="
-          Write-Host "RustDesk started."
-          Write-Host "Open RustDesk app on your phone."
-          Write-Host "Check ID from RustDesk window."
-          Write-Host "====================================="
+          Write-Host "Go to https://remotedesktop.google.com/headless"
+          Write-Host "Copy the Windows command shown there."
+          Write-Host "Paste it in a new workflow step to activate the RDP."
 
-      - name: Keep Runner Alive
+      - name: Keep Alive
         run: |
           while ($true) {
-            Write-Host "RustDesk session active..."
+            Write-Host "RDP running..."
             Start-Sleep 300
           }
