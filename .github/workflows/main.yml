@@ -4,28 +4,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  rdp:
     runs-on: windows-latest
     timeout-minutes: 360
 
     steps:
-      - name: Download Chrome Remote Desktop
+      - name: Install Chrome Remote Desktop
         run: |
           Invoke-WebRequest https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile crd.msi
-          Start-Process msiexec.exe -ArgumentList '/i crd.msi /quiet /norestart' -Wait
+          Start-Process msiexec.exe -ArgumentList "/i crd.msi /quiet /norestart" -Wait
 
-      - name: Install Chrome
+      - name: Instructions
         run: |
-          Invoke-WebRequest https://www.slimjet.com/chrome/download-chrome-offline-installer.exe -OutFile chrome.exe
-          Start-Process chrome.exe -ArgumentList '/silent /install' -Wait
+          Write-Host "Open this link:"
+          Write-Host "https://remotedesktop.google.com/headless"
+          Write-Host ""
+          Write-Host "Copy the Windows command shown there"
+          Write-Host "Run that command in a new workflow step"
 
-      - name: Setup CRD
-        run: |
-          Write-Host "Go to https://remotedesktop.google.com/headless"
-          Write-Host "Copy the Windows command shown there."
-          Write-Host "Paste it in a new workflow step to activate the RDP."
-
-      - name: Keep Alive
+      - name: Keep Runner Alive
         run: |
           while ($true) {
             Write-Host "RDP running..."
