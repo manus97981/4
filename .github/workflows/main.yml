@@ -14,18 +14,22 @@ jobs:
           $url="https://github.com/rustdesk/rustdesk/releases/download/1.2.3/rustdesk-1.2.3-x86_64.exe"
           Invoke-WebRequest $url -OutFile rustdesk.exe
 
-      - name: Start RustDesk
+      - name: Extract RustDesk
         run: |
-          Start-Process ".\rustdesk.exe"
-          Start-Sleep 15
+          Start-Process .\rustdesk.exe
+          Start-Sleep 20
 
-      - name: Show RustDesk ID
+      - name: Show RustDesk Info
         run: |
-          .\rustdesk.exe --get-id
+          Write-Host "====================================="
+          Write-Host "RustDesk started."
+          Write-Host "Open RustDesk app on your phone."
+          Write-Host "Check ID from RustDesk window."
+          Write-Host "====================================="
 
       - name: Keep Runner Alive
         run: |
           while ($true) {
-            Write-Host "RustDesk Running..."
+            Write-Host "RustDesk session active..."
             Start-Sleep 300
           }
