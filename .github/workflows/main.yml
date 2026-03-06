@@ -1,0 +1,38 @@
+name: RustDesk-RDP
+
+on:
+  workflow_dispatch:
+
+jobs:
+  rdp:
+    runs-on: windows-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Download RustDesk
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/rustdesk/rustdesk/releases/latest/download/rustdesk-1.2.3-x86_64.exe" -OutFile "rustdesk.exe"
+
+      - name: Install RustDesk
+        run: |
+          Start-Process -FilePath ".\rustdesk.exe" -ArgumentList "--silent-install" -Wait
+
+      - name: Start RustDesk
+        run: |
+          Start-Process "C:\Program Files\RustDesk\rustdesk.exe"
+          Start-Sleep -Seconds 20
+
+      - name: Show RustDesk ID
+        run: |
+          $id = & "C:\Program Files\RustDesk\rustdesk.exe" --get-id
+          Write-Host "================================"
+          Write-Host "RustDesk ID: $id"
+          Write-Host "Password: Check RustDesk window"
+          Write-Host "================================"
+
+      - name: Keep Runner Alive
+        run: |
+          while ($true) {
+            Write-Host "RustDesk RDP Running..."
+            Start-Sleep -Seconds 300
+          }
